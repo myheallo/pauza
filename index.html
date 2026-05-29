@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HEALLO® · Pauza</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@400;500&display=swap');
+
+:root{
+  --c1:#FBF7F4; --c2:#2D4444; --c3:#4A1F26; --c4:#B85970; --c5:#C68B45;
+  --serif:"Cormorant Garamond",Georgia,serif;
+  --sans:"Montserrat",system-ui,sans-serif;
+  --bg:var(--c1); --card:#FFFFFF; --text:var(--c2); --accent:var(--c4);
+  --hair:rgba(45,68,68,.14); --hair-strong:rgba(45,68,68,.28);
+}
+.dark{
+  --bg:var(--c3); --card:#3a1820; --text:var(--c1);
+  --hair:rgba(251,247,244,.14); --hair-strong:rgba(251,247,244,.28);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:var(--sans);
+  display:flex; align-items:center; justify-content:center;
+  min-height:100dvh; padding:24px; overflow-x:hidden;
+  transition:background .5s ease, color .5s ease;
+}
+.wrap{width:100%; max-width:540px; position:relative; z-index:2}
+
+.toggle{
+  position:fixed; top:18px; right:18px; z-index:10;
+  font-family:var(--sans); font-size:13px; color:var(--text);
+  background:transparent; border:0.5px solid var(--hair-strong);
+  border-radius:8px; padding:8px 12px; cursor:pointer;
+  transition:opacity .3s; opacity:.7;
+}
+.toggle:hover{opacity:1}
+
+.label{
+  font-family:var(--sans); font-size:11px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--c5); margin-bottom:18px;
+}
+
+.screen{display:none; animation:fade .7s ease both}
+.screen.active{display:block}
+@keyframes fade{from{opacity:0; transform:translateY(8px)}to{opacity:1; transform:none}}
+
+h1{font-family:var(--serif); font-weight:500; font-size:clamp(38px,9vw,56px); line-height:1.04; margin-bottom:20px}
+.lead{font-family:var(--serif); font-size:clamp(19px,4.5vw,23px); line-height:1.5; color:var(--text); opacity:.92; margin-bottom:18px}
+.wink{font-family:var(--sans); font-size:14px; line-height:1.6; opacity:.62; margin-bottom:34px; max-width:420px}
+
+.streak{font-family:var(--sans); font-size:12.5px; color:var(--c5); margin-bottom:28px; letter-spacing:.02em}
+
+button.cta{
+  font-family:var(--sans); font-size:15px; font-weight:500;
+  color:#fff; background:var(--accent); border:0;
+  border-radius:8px; padding:15px 30px; cursor:pointer;
+  transition:transform .2s ease, filter .2s ease;
+}
+button.cta:hover{filter:brightness(1.06); transform:translateY(-1px)}
+button.cta:active{transform:translateY(0)}
+
+/* ---- Dýchání ---- */
+.breathe-stage{display:flex; flex-direction:column; align-items:center; text-align:center; padding-top:6px}
+.ring-box{position:relative; width:260px; height:260px; display:flex; align-items:center; justify-content:center; margin-bottom:30px}
+
+.ripple{position:absolute; border-radius:50%; background:var(--accent); opacity:.10}
+.r1{width:100%; height:100%; animation:breathe 10s ease-in-out infinite}
+.r2{width:72%; height:72%; opacity:.16; animation:breathe 10s ease-in-out infinite}
+.r3{width:46%; height:46%; opacity:.22; animation:breathe 10s ease-in-out infinite}
+@keyframes breathe{
+  0%,100%{transform:scale(.78)}
+  40%{transform:scale(1.06)}
+  50%{transform:scale(1.06)}
+}
+
+.ring-svg{position:absolute; inset:0; transform:rotate(-90deg)}
+.ring-svg circle{fill:none; stroke-linecap:round}
+.ring-bg{stroke:var(--hair)}
+.ring-fg{stroke:var(--accent); transition:stroke-dashoffset 1s linear}
+
+.breath-word{position:relative; z-index:3; font-family:var(--serif); font-style:italic; font-size:30px; color:var(--text)}
+
+.q{min-height:62px; font-family:var(--serif); font-style:italic; font-size:clamp(20px,5vw,25px); line-height:1.4; margin:6px auto 26px; max-width:420px; transition:opacity .9s ease}
+.skip{font-family:var(--sans); font-size:13px; color:var(--text); opacity:.5; background:none; border:0; cursor:pointer; text-decoration:underline; text-underline-offset:3px}
+.skip:hover{opacity:.85}
+
+/* ---- Závěr ---- */
+.choices{display:flex; flex-direction:column; gap:12px; margin-top:24px}
+button.choice{
+  font-family:var(--sans); font-size:15px; color:var(--text);
+  background:var(--card); border:0.5px solid var(--hair-strong);
+  border-radius:10px; padding:16px 20px; cursor:pointer; text-align:left;
+  transition:border-color .2s, transform .15s;
+}
+button.choice:hover{border-color:var(--accent); transform:translateY(-1px)}
+
+.outcome{font-family:var(--serif); font-size:clamp(20px,4.6vw,24px); line-height:1.5; margin-bottom:18px}
+.basket{font-family:var(--sans); font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--c5); border:0.5px dashed var(--hair-strong); border-radius:10px; padding:18px; text-align:center; margin:24px 0}
+.restart{margin-top:8px}
+.sig{font-family:var(--sans); font-size:12px; opacity:.45; margin-top:40px; letter-spacing:.04em}
+</style>
+</head>
+<body class="hw">
+<button class="toggle" id="toggle">🌙 tmavý režim</button>
+
+<div class="wrap">
+
+  <!-- ÚVOD -->
+  <section class="screen active" id="s-intro">
+    <div class="label">HEALLO® · pauza</div>
+    <h1>Chytla tě<br>vlna?</h1>
+    <p class="lead">Nutkání něco koupit přišlo jako vlna… nečekaně a silně. Nemusíš ji utišit nákupem. Můžeme ji chvíli odsurfovat spolu… a ono se to přelije samo.</p>
+    <p class="wink">Jasně že to chceš. Tvůj mozek si myslí, že je to záchrana. Dáme tomu šedesát vteřin, než se rozhodneš?</p>
+    <div class="streak" id="streak"></div>
+    <button class="cta" id="start">Jsem na vlně</button>
+  </section>
+
+  <!-- DÝCHÁNÍ -->
+  <section class="screen" id="s-breathe">
+    <div class="breathe-stage">
+      <div class="ring-box">
+        <div class="ripple r1"></div>
+        <div class="ripple r2"></div>
+        <div class="ripple r3"></div>
+        <svg class="ring-svg" viewBox="0 0 260 260">
+          <circle class="ring-bg" cx="130" cy="130" r="120" stroke-width="3"></circle>
+          <circle class="ring-fg" id="ring" cx="130" cy="130" r="120" stroke-width="3"></circle>
+        </svg>
+        <div class="breath-word" id="breathWord">nádech</div>
+      </div>
+      <div class="q" id="question"></div>
+      <button class="skip" id="skip">už mi je líp →</button>
+    </div>
+  </section>
+
+  <!-- JAK JE TI -->
+  <section class="screen" id="s-check">
+    <div class="label">a teď</div>
+    <h1>Jak je<br>ti teď?</h1>
+    <div class="choices">
+      <button class="choice" data-o="0">Vlna se přelila</button>
+      <button class="choice" data-o="1">Ještě tu trochu je</button>
+      <button class="choice" data-o="2">Stejně to koupím</button>
+    </div>
+  </section>
+
+  <!-- VÝSLEDEK -->
+  <section class="screen" id="s-out">
+    <div class="label" id="outLabel">přelilo se</div>
+    <p class="outcome" id="outText"></p>
+    <div class="basket" id="basket"></div>
+    <button class="cta restart" id="restart">Zpátky na klid</button>
+    <div class="sig">HEALLO® · stojím při tobě</div>
+  </section>
+
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const screens = {intro:'#s-intro', breathe:'#s-breathe', check:'#s-check', out:'#s-out'};
+function show(name){
+  Object.values(screens).forEach(s=>$(s).classList.remove('active'));
+  $(screens[name]).classList.add('active');
+}
+
+/* dark mode */
+const body=document.body, toggle=$('#toggle');
+toggle.onclick=()=>{
+  const dark=body.classList.toggle('dark');
+  toggle.textContent = dark ? '☀️ světlý režim' : '🌙 tmavý režim';
+};
+
+/* streak */
+function monthKey(){const d=new Date();return 'heallo-pauza-'+d.getFullYear()+'-'+(d.getMonth()+1);}
+function getStreak(){return parseInt(localStorage.getItem(monthKey())||'0',10);}
+function renderStreak(){
+  const n=getStreak();
+  $('#streak').textContent = n>0 ? ('Tenhle měsíc jsi už přečkala '+n+' '+vlnText(n)+'. Jsi v tom dobrá.') : '';
+}
+function vlnText(n){
+  if(n===1) return 'vlnu';
+  if(n>=2 && n<=4) return 'vlny';
+  return 'vln';
+}
+renderStreak();
+
+/* dýchání */
+const questions=[
+  'Co teď doopravdy potřebuju…?',
+  'Mám hlad po té věci… nebo po něčem jiném?',
+  'Co bych cítila zítra, kdybych to dnes nekoupila?'
+];
+const DURATION=60;            // vteřin
+const CYCLE=10;               // délka jednoho nádech+výdech
+const R=120, CIRC=2*Math.PI*R;
+const ring=$('#ring');
+ring.style.strokeDasharray=CIRC;
+ring.style.strokeDashoffset=0;
+
+let timer=null, elapsed=0;
+function startBreath(){
+  elapsed=0;
+  ring.style.strokeDashoffset=0;
+  $('#breathWord').textContent='nádech';
+  $('#question').textContent=questions[0];
+  $('#question').style.opacity=1;
+  timer=setInterval(tick,1000);
+}
+function tick(){
+  elapsed++;
+  // progress ring
+  ring.style.strokeDashoffset = CIRC*(elapsed/DURATION);
+  // dech: nádech 0-4s, výdech 4-10s v rámci cyklu
+  const inCycle=elapsed%CYCLE;
+  $('#breathWord').textContent = inCycle<4 ? 'nádech' : 'výdech';
+  // otázky střídat à 20s
+  const qi=Math.min(Math.floor(elapsed/20),questions.length-1);
+  const q=$('#question');
+  if(q.textContent!==questions[qi]){
+    q.style.opacity=0;
+    setTimeout(()=>{q.textContent=questions[qi]; q.style.opacity=1;},600);
+  }
+  if(elapsed>=DURATION) finishBreath();
+}
+function finishBreath(){clearInterval(timer); show('check');}
+
+/* výsledky */
+const outcomes=[
+  {label:'přelilo se',
+   text:'Vidíš to… nepotřebovala jsi tu vlnu utišit. Jen přečkat. A ona odešla sama.',
+   basket:'tvůj dnešní košík\nprázdný a hrdý',
+   counts:true},
+  {label:'ještě tu je',
+   text:'To nevadí. Vlny chodí ve vlnách. Dej si sklenici vody, postav se k oknu… a kdyžtak se sem vrať. Nemusíš v tom být sama.',
+   basket:'vlna ještě doznívá\ndýchej dál',
+   counts:false},
+  {label:'tvoje volba',
+   text:'Tak ať je to tvoje volba… ne vlna za tebe. Když to po téhle minutě pořád chceš a víš proč, kup to bez výčitek. O tohle tady jde… vybírat vědomě, ne ze zoufalství.',
+   basket:'rozhodla ses ty\nne impulz',
+   counts:false}
+];
+document.querySelectorAll('.choice').forEach(btn=>{
+  btn.onclick=()=>{
+    const o=outcomes[+btn.dataset.o];
+    $('#outLabel').textContent=o.label;
+    $('#outText').textContent=o.text;
+    $('#basket').textContent=o.basket;
+    if(o.counts){
+      localStorage.setItem(monthKey(), getStreak()+1);
+      renderStreak();
+    }
+    show('out');
+  };
+});
+
+$('#start').onclick=()=>{show('breathe'); startBreath();};
+$('#skip').onclick=()=>{clearInterval(timer); show('check');};
+$('#restart').onclick=()=>{show('intro'); renderStreak();};
+</script>
+</body>
+</html>
