@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HEALLO® · Dopis</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@400;500&display=swap');
+
+:root{
+  --c1:#FBF7F4; --c2:#2D4444; --c3:#4A1F26; --c4:#B85970; --c5:#C68B45;
+  --serif:"Cormorant Garamond",Georgia,serif;
+  --sans:"Montserrat",system-ui,sans-serif;
+  --bg:var(--c1); --card:#FFFFFF; --text:var(--c2); --accent:var(--c4);
+  --hair:rgba(45,68,68,.14); --hair-strong:rgba(45,68,68,.28);
+}
+.dark{
+  --bg:var(--c3); --card:#3a1820; --text:var(--c1);
+  --hair:rgba(251,247,244,.14); --hair-strong:rgba(251,247,244,.28);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  background:var(--bg); color:var(--text); font-family:var(--sans);
+  display:flex; align-items:flex-start; justify-content:center;
+  min-height:100dvh; padding:48px 24px; transition:background .5s, color .5s;
+}
+.wrap{width:100%; max-width:580px}
+
+.toggle{
+  position:fixed; top:18px; right:18px; z-index:10; font-size:13px; color:var(--text);
+  background:transparent; border:0.5px solid var(--hair-strong);
+  border-radius:8px; padding:8px 12px; cursor:pointer; opacity:.7; transition:opacity .3s;
+}
+.toggle:hover{opacity:1}
+
+.label{font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--c5); margin-bottom:16px}
+.screen{display:none; animation:fade .7s ease both}
+.screen.active{display:block}
+@keyframes fade{from{opacity:0; transform:translateY(8px)}to{opacity:1; transform:none}}
+
+h1{font-family:var(--serif); font-weight:500; font-size:clamp(34px,8vw,50px); line-height:1.06; margin-bottom:16px}
+.lead{font-family:var(--serif); font-size:clamp(18px,4.4vw,22px); line-height:1.5; opacity:.9; margin-bottom:30px}
+
+.choices{display:flex; flex-direction:column; gap:12px}
+button.choice{
+  font-family:var(--serif); font-size:22px; color:var(--text);
+  background:var(--card); border:0.5px solid var(--hair-strong);
+  border-radius:11px; padding:18px 20px; cursor:pointer; text-align:left; transition:border-color .2s, transform .15s;
+}
+button.choice:hover{border-color:var(--accent); transform:translateY(-1px)}
+
+.field{margin-bottom:26px}
+.starter{font-family:var(--serif); font-style:italic; font-size:clamp(19px,4.6vw,23px); line-height:1.4; margin-bottom:10px}
+textarea{
+  width:100%; min-height:78px; resize:vertical; font-family:var(--serif); font-size:18px; line-height:1.5;
+  color:var(--text); background:var(--card); border:0.5px solid var(--hair-strong);
+  border-radius:10px; padding:14px 16px; transition:border-color .2s;
+}
+textarea:focus{outline:none; border-color:var(--accent)}
+
+.row{display:flex; gap:10px; flex-wrap:wrap; margin-top:8px}
+button.cta{
+  font-family:var(--sans); font-size:15px; font-weight:500; color:#fff; background:var(--accent);
+  border:0; border-radius:8px; padding:14px 26px; cursor:pointer; transition:filter .2s, transform .2s;
+}
+button.cta:hover{filter:brightness(1.06); transform:translateY(-1px)}
+.ghost{background:transparent; color:var(--text); border:0.5px solid var(--hair-strong)}
+.ghost:hover{filter:none; border-color:var(--accent)}
+
+.letter{
+  font-family:var(--serif); font-size:clamp(18px,4.5vw,21px); line-height:1.7; white-space:pre-wrap;
+  background:var(--card); border:0.5px solid var(--hair); border-radius:12px; padding:30px 28px; margin-bottom:24px;
+}
+.letter .salut{font-style:italic; margin-bottom:18px; display:block}
+.sig{font-family:var(--sans); font-size:12px; opacity:.45; margin-top:40px; letter-spacing:.04em}
+.hint{font-family:var(--sans); font-size:13px; opacity:.55; margin:-14px 0 26px}
+</style>
+</head>
+<body class="hw">
+<button class="toggle" id="toggle">🌙 tmavý režim</button>
+
+<div class="wrap">
+
+  <!-- KOMU -->
+  <section class="screen active" id="s-who">
+    <div class="label">HEALLO® · dopis</div>
+    <h1>Co tím<br>vlastně dáváš?</h1>
+    <p class="lead">Někdy nekupujeme věc. Kupujeme lásku, klid, omluvu… nebo radost, kterou neumíme dát jinak. Tenhle dopis nikam neodejde. Je jen pro tebe. Komu ho píšeš?</p>
+    <div class="choices">
+      <button class="choice" data-who="dcera">své dceři</button>
+      <button class="choice" data-who="syn">svému dítěti</button>
+      <button class="choice" data-who="dite">svému dětskému já</button>
+    </div>
+  </section>
+
+  <!-- PSANÍ -->
+  <section class="screen" id="s-write">
+    <div class="label" id="wLabel">píšeš</div>
+    <h1>Dopis</h1>
+    <p class="hint">Nemusíš vyplnit všechno. Stačí to, co se ozve. Nikdo to neuvidí.</p>
+    <div id="fields"></div>
+    <div class="row">
+      <button class="cta" id="read">Přečíst si to</button>
+      <button class="cta ghost" id="back1">Zpět</button>
+    </div>
+    <div class="sig">HEALLO® · stojím při tobě</div>
+  </section>
+
+  <!-- DOPIS -->
+  <section class="screen" id="s-letter">
+    <div class="label">tvůj dopis</div>
+    <div class="letter" id="out"></div>
+    <div class="row">
+      <button class="cta" id="copy">Zkopírovat</button>
+      <button class="cta ghost" id="save">Uložit</button>
+      <button class="cta ghost" id="edit">Upravit</button>
+    </div>
+    <div class="sig">HEALLO® · stojím při tobě</div>
+  </section>
+
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const body=document.body, toggle=$('#toggle');
+toggle.onclick=()=>{const d=body.classList.toggle('dark'); toggle.textContent=d?'☀️ světlý režim':'🌙 tmavý režim';};
+
+const salut={
+  dcera:'Milá holčičko,',
+  syn:'Milé moje dítě,',
+  dite:'Milé moje malé já,'
+};
+const starters=[
+  {id:'s1', text:'Nejvíc bych ti chtěla dát ne věc, ale…', ph:'…'},
+  {id:'s2', text:'Když ti něco koupím, doufám, že ucítíš…', ph:'…'},
+  {id:'s3', text:'Ale to, co ode mě opravdu potřebuješ, je…', ph:'…'},
+  {id:'s4', text:'Sama jsem jako dítě nejvíc postrádala…', ph:'…'},
+  {id:'s5', text:'Slibuju, že se budu učit dávat ti to takhle:', ph:'…'}
+];
+
+let who='dcera';
+const fieldsBox=$('#fields');
+function buildFields(){
+  fieldsBox.innerHTML='';
+  starters.forEach(s=>{
+    const wrap=document.createElement('div'); wrap.className='field';
+    const lab=document.createElement('div'); lab.className='starter'; lab.textContent=s.text;
+    const ta=document.createElement('textarea'); ta.id=s.id; ta.placeholder=s.ph; ta.value=localStorage.getItem('heallo-dopis-'+s.id)||'';
+    ta.oninput=()=>localStorage.setItem('heallo-dopis-'+s.id, ta.value);
+    wrap.appendChild(lab); wrap.appendChild(ta); fieldsBox.appendChild(wrap);
+  });
+}
+
+document.querySelectorAll('.choice').forEach(b=>{
+  b.onclick=()=>{
+    who=b.dataset.who;
+    $('#wLabel').textContent='píšeš '+(who==='dite'?'sobě':'svému dítěti');
+    buildFields();
+    show('s-write');
+  };
+});
+
+function show(id){
+  ['s-who','s-write','s-letter'].forEach(x=>$('#'+x).classList.remove('active'));
+  $('#'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function compose(){
+  let body=salut[who]+'\n\n';
+  starters.forEach(s=>{
+    const v=($('#'+s.id).value||'').trim();
+    if(v){ body+=s.text+' '+v+'\n\n'; }
+  });
+  body+='Mám tě.';
+  return body;
+}
+
+$('#read').onclick=()=>{
+  const text=compose();
+  $('#out').innerHTML='<span class="salut">'+text.split('\n')[0]+'</span>'+text.split('\n').slice(1).join('\n').trim();
+  show('s-letter');
+};
+$('#back1').onclick=()=>show('s-who');
+$('#edit').onclick=()=>show('s-write');
+$('#copy').onclick=()=>{
+  navigator.clipboard.writeText(compose()).then(()=>{
+    $('#copy').textContent='Zkopírováno'; setTimeout(()=>$('#copy').textContent='Zkopírovat',1600);
+  });
+};
+$('#save').onclick=()=>{
+  starters.forEach(s=>localStorage.setItem('heallo-dopis-'+s.id, $('#'+s.id)?$('#'+s.id).value:localStorage.getItem('heallo-dopis-'+s.id)||''));
+  $('#save').textContent='Uloženo'; setTimeout(()=>$('#save').textContent='Uložit',1600);
+};
+</script>
+</body>
+</html>

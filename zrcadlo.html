@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HEALLO® · Zrcadlo</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@400;500&display=swap');
+
+:root{
+  --c1:#FBF7F4; --c2:#2D4444; --c3:#4A1F26; --c4:#B85970; --c5:#C68B45;
+  --serif:"Cormorant Garamond",Georgia,serif;
+  --sans:"Montserrat",system-ui,sans-serif;
+  --bg:var(--c1); --card:#FFFFFF; --text:var(--c2); --accent:var(--c4);
+  --hair:rgba(45,68,68,.14); --hair-strong:rgba(45,68,68,.28);
+}
+.dark{
+  --bg:var(--c3); --card:#3a1820; --text:var(--c1);
+  --hair:rgba(251,247,244,.14); --hair-strong:rgba(251,247,244,.28);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  background:var(--bg); color:var(--text); font-family:var(--sans);
+  display:flex; align-items:center; justify-content:center;
+  min-height:100dvh; padding:32px 24px; transition:background .5s, color .5s;
+}
+.wrap{width:100%; max-width:560px}
+
+.toggle{
+  position:fixed; top:18px; right:18px; z-index:10; font-size:13px; color:var(--text);
+  background:transparent; border:0.5px solid var(--hair-strong);
+  border-radius:8px; padding:8px 12px; cursor:pointer; opacity:.7; transition:opacity .3s;
+}
+.toggle:hover{opacity:1}
+
+.label{font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--c5); margin-bottom:16px}
+.screen{display:none; animation:fade .7s ease both}
+.screen.active{display:block}
+@keyframes fade{from{opacity:0; transform:translateY(8px)}to{opacity:1; transform:none}}
+
+h1{font-family:var(--serif); font-weight:500; font-size:clamp(34px,8vw,50px); line-height:1.06; margin-bottom:16px}
+.lead{font-family:var(--serif); font-size:clamp(18px,4.4vw,22px); line-height:1.5; opacity:.9; margin-bottom:30px}
+
+.grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+button.feel{
+  font-family:var(--serif); font-size:21px; color:var(--text);
+  background:var(--card); border:0.5px solid var(--hair-strong);
+  border-radius:11px; padding:20px 16px; cursor:pointer; transition:border-color .2s, transform .15s;
+}
+button.feel:hover{border-color:var(--accent); transform:translateY(-2px)}
+
+.mirror-name{font-family:var(--serif); font-style:italic; font-size:clamp(26px,6vw,34px); margin-bottom:22px}
+.mirror-body{font-family:var(--serif); font-size:clamp(19px,4.6vw,23px); line-height:1.55; margin-bottom:24px}
+.mirror-step{
+  font-family:var(--sans); font-size:14.5px; line-height:1.6; opacity:.85;
+  border-left:2px solid var(--accent); padding:6px 0 6px 16px; margin-bottom:34px;
+}
+button.cta{
+  font-family:var(--sans); font-size:15px; font-weight:500; color:#fff; background:var(--accent);
+  border:0; border-radius:8px; padding:14px 28px; cursor:pointer; transition:filter .2s, transform .2s;
+}
+button.cta:hover{filter:brightness(1.06); transform:translateY(-1px)}
+.ghost{background:transparent; color:var(--text); border:0.5px solid var(--hair-strong); margin-left:10px}
+.ghost:hover{filter:none; border-color:var(--accent)}
+.sig{font-family:var(--sans); font-size:12px; opacity:.45; margin-top:42px; letter-spacing:.04em}
+</style>
+</head>
+<body class="hw">
+<button class="toggle" id="toggle">🌙 tmavý režim</button>
+
+<div class="wrap">
+  <section class="screen active" id="s-intro">
+    <div class="label">HEALLO® · zrcadlo</div>
+    <h1>Než koupíš…<br>co teď cítíš?</h1>
+    <p class="lead">Ta chuť něco koupit málokdy mluví o té věci. Většinou mluví o něčem pod ní. Ťukni na to, co je ti teď nejblíž… a podíváme se spolu.</p>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="screen" id="s-mirror">
+    <div class="label">co je pod tím</div>
+    <div class="mirror-name" id="mName"></div>
+    <div class="mirror-body" id="mBody"></div>
+    <div class="mirror-step" id="mStep"></div>
+    <button class="cta" id="again">Zkusit znovu</button>
+    <div class="sig">HEALLO® · stojím při tobě</div>
+  </section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const body=document.body, toggle=$('#toggle');
+toggle.onclick=()=>{const d=body.classList.toggle('dark'); toggle.textContent=d?'☀️ světlý režim':'🌙 tmavý režim';};
+
+const feelings=[
+  {k:'Nuda', name:'Nuda',
+   body:'Tohle není hlad po věci… je to hlad po jiskře.',
+   step:'Pusť si na pět minut písničku, u které se musíš hýbat. Jiskra bývá v těle, ne v košíku.'},
+  {k:'Únava', name:'Únava',
+   body:'Tahle chuť je únava v přestrojení.',
+   step:'Věc tě nedobije. Deset minut potmě nebo postel ano. Dovol si to dřív, než sáhneš po nákupu.'},
+  {k:'Samota', name:'Samota',
+   body:'Chceš si něco koupit… ale možná chceš spíš někoho slyšet.',
+   step:'Komu bys teď mohla napsat nebo zavolat? Napiš to jméno dřív, než otevřeš obchod.'},
+  {k:'Prázdno', name:'Prázdno',
+   body:'Tu prázdnotu věc nezaplní… jen ji na chvíli přeplní.',
+   step:'Zkus se jí na minutu jen dotknout, beze spěchu a beze studu. Prázdno se snáší líp, když u něj nejsi v křeči.'},
+  {k:'Vztek', name:'Vztek',
+   body:'Pod chutí utrácet bývá vztek, který nemá kam jít.',
+   step:'Vydechni ho nahlas. Nebo si napiš, na koho doopravdy je. Peníze za něj nemůžou.'},
+  {k:'Smutek', name:'Smutek',
+   body:'Nakupování je rychlé pohlazení. Smutek ale chce být viděný, ne přehlušený.',
+   step:'Dovolíš mu pár minut? Polož si ruku tam, kde to nejvíc tlačí, a zůstaň u toho.'},
+  {k:'Úzkost', name:'Úzkost',
+   body:'Koupit znamená mít aspoň něco pod kontrolou. Tomu rozumím.',
+   step:'Polož ruku na hrudník a prodluž výdech. Kontrola se vrací dechem, ne košíkem.'},
+  {k:'Chci slavit', name:'Chuť oslavit',
+   body:'Někdy chceme koupit radost, kterou už máme.',
+   step:'Co kdybys ji oslavila něčím, co se nedá zabalit? Procházkou, hovorem, tancem v kuchyni.'}
+];
+
+const grid=$('#grid');
+feelings.forEach(f=>{
+  const b=document.createElement('button');
+  b.className='feel'; b.textContent=f.k;
+  b.onclick=()=>{
+    $('#mName').textContent=f.name;
+    $('#mBody').textContent=f.body;
+    $('#mStep').textContent=f.step;
+    $('#s-intro').classList.remove('active');
+    $('#s-mirror').classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  };
+  grid.appendChild(b);
+});
+$('#again').onclick=()=>{
+  $('#s-mirror').classList.remove('active');
+  $('#s-intro').classList.add('active');
+};
+</script>
+</body>
+</html>
